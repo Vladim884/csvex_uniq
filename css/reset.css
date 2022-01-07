@@ -1,0 +1,10 @@
+ul, li {
+    list-style: none;
+    padding: 0;
+    margin: o;
+}
+
+li textarea {
+    width: 100%;
+    margin-top: 10px;
+}

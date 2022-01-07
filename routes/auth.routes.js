@@ -6,6 +6,16 @@ const User = require("../models/User")
 const bcrypt = require("bcryptjs")
 const config = require("config")
 const  multer   =  require ( 'multer' ) 
+const fse = require('fs-extra')
+const fs = require('fs')
+const uuidv1 = require('uuidv1');
+const path = require('path');
+const shell = require('shelljs');
+
+
+console.log(uuidv1())
+
+
 
 const jwt = require("jsonwebtoken")
 const {check, validationResult} = require("express-validator")
@@ -67,40 +77,48 @@ router.post('/login',
             //     }
             // })
             res.render('./start.hbs')
-            console.log(user._id)
-            const fileEndDir = `${user._id}`
-            const upload = multer({ dest: `./files/${fileEndDir}`})
-            // app.use(multer({dest : 'files/'+ `${fileEndDir}`}).single("filedata"))
-            // const  upload  =  multer ( {  dest : 'files/'+ `${fileEndDir}`  } )
-            router.post('/upload', upload.single('filedata'),
-                
-                function (req, res, next) {
-                    
+            let storage = multer.diskStorage({
+                //https://stackoverflow.com/questions/53916462/generate-destination-path-before-file-upload-multer
+                // pass function that will generate destination path
+                destination: (req, file, cb) => {
+                  // initial upload path
+                  let dirPath = '../files/' + `%{user._id}`
+                  let destination = path.join(__dirname, '../files/') // ./uploads/
+                //   console.log(destination)
+                  let id = uuidv1();
+                  shell.mkdir('-p', './files/' + id)
+            
+                  destination = path.join(destination, '', id) // ./uploads/files/generated-uuid-here/
+                //   console.log('dest', destination)
+              
+                  cb(
+                    null,
+                    destination
+                  );
+                },
+              
+                // pass function that may generate unique filename if needed
+                filename: (req, file, cb) => {
+                  cb(
+                    null,
+                    Date.now() + '.' + path.extname(file.originalname)
+                  );
+                }
+            
+              });
+              
+              let upload = multer({storage: storage})
+              router.post('/upload', upload.any(),  (req, res) => {
+                res.json('test')
+              })
 
-   
-
-                    try {
-                        console.log(req.file)
-                        console.log(req.body)
-                        
-                        // req.file is the name of your file in the form above, here 'uploaded_file'
-   // req.body will hold the text fields, if there were any 
-   console.log(req.file, req.body)
-                            // req.file is the `avatar` file
-                            // req.body will hold the text fields, if there were any
-                            return res.render('index.hbs')
-                    } catch (e) {
-                        console.log(e)
-                    }
-                })
-                    
-                    
-
-        } catch (e) {
+             } catch (e) {
             console.log(e)
             res.send({message: "Server error"})
         }
     })
+    
+    
 
 router.get('/auth', authMiddleware,
     async (req, res) => {
