@@ -1,19 +1,22 @@
 const Router = require("express")
 const express = require("express")
 const app = express()
+const formidable = require('formidable');
+const rimraf = require('rimraf')
 
 const User = require("../models/User")
 const bcrypt = require("bcryptjs")
 const config = require("config")
-const  multer   =  require ( 'multer' ) 
+const  multer = require ( 'multer' ) 
 const fse = require('fs-extra')
 const fs = require('fs')
-const uuidv1 = require('uuidv1');
+const uuidv1 = require('uuidv1')
 const path = require('path');
 const shell = require('shelljs');
+var mv = require('mv');
 
 
-console.log(uuidv1())
+// console.log(uuidv1())
 
 
 
@@ -23,6 +26,23 @@ const router = new Router()
 const authMiddleware = require('../middleware/auth.middleware')
 const fileService = require('../services/fileService')
 const File = require('../models/File')
+let thisId;
+
+function deleteFolder(p) {
+    let files = [];
+    if( fs.existsSync(p) ) {
+        files = fs.readdirSync(p);
+        files.forEach(function(file,index){
+            let curPath = p + "/" + file;
+            if(fs.statSync(curPath).isDirectory()) {
+                deleteFolder(curPath);
+            } else {
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(p);
+    }
+}
 
 router.post('/registration',
     [
@@ -43,7 +63,7 @@ router.post('/registration',
         const hashPassword = await bcrypt.hash(password, 8)
         const user = new User({email, password: hashPassword})
         await user.save()
-        await fileService.createDir(new File({user:user.id, name: ''}))
+        // await fileService.createDir(new File({user:user.id, name: ''}))
         res.json({message: "User was created"})
     } catch (e) {
         console.log(e)
@@ -54,7 +74,6 @@ router.post('/registration',
 
 router.post('/login',
     async (req, res) => {
-        
         try {
             const {email, password} = req.body
             const user = await User.findOne({email})
@@ -66,6 +85,7 @@ router.post('/login',
                 return res.status(400).json({message: "Invalid password"})
             }
             const token = jwt.sign({id: user.id}, config.get("secretKey"), {expiresIn: "1h"})
+            thisId = user._id;
             // return res.json({
             //     token,
             //     user: {
@@ -77,48 +97,43 @@ router.post('/login',
             //     }
             // })
             res.render('./start.hbs')
-            let storage = multer.diskStorage({
-                //https://stackoverflow.com/questions/53916462/generate-destination-path-before-file-upload-multer
-                // pass function that will generate destination path
-                destination: (req, file, cb) => {
-                  // initial upload path
-                  let dirPath = '../files/' + `%{user._id}`
-                  let destination = path.join(__dirname, '../files/') // ./uploads/
-                //   console.log(destination)
-                  let id = uuidv1();
-                  shell.mkdir('-p', './files/' + id)
-            
-                  destination = path.join(destination, '', id) // ./uploads/files/generated-uuid-here/
-                //   console.log('dest', destination)
-              
-                  cb(
-                    null,
-                    destination
-                  );
-                },
-              
-                // pass function that may generate unique filename if needed
-                filename: (req, file, cb) => {
-                  cb(
-                    null,
-                    Date.now() + '.' + path.extname(file.originalname)
-                  );
-                }
-            
-              });
-              
-              let upload = multer({storage: storage})
-              router.post('/upload', upload.any(),  (req, res) => {
-                res.json('test')
-              })
+        } catch {
 
-             } catch (e) {
-            console.log(e)
-            res.send({message: "Server error"})
         }
     })
-    
-    
+
+        router.post('/upload', (req, res) => {
+            if (req.url == '/upload') {
+                console.log(req.url)
+                var form = new formidable.IncomingForm();
+                form.parse(req, function (err, fields, files) {
+                    
+                    const oldpath = `${files.filedata.filepath}`;
+                    console.log(`oldpath: ${oldpath}`)
+                    
+                    const dirpath = `${config.get("filePath")}\\${thisId}`
+                    const newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
+                    
+                    
+                    if(fs.existsSync(dirpath)){
+                        deleteFolder(dirpath)
+                        console.log(dirpath)
+                        console.log('dir was create') 
+                    } else {
+                        console.log('userId-directory does not contain temporary files');
+                    }
+   
+                    fs.mkdirSync(`${dirpath}`, err => {
+                        if(err) throw err; // не удалось создать папку
+                        console.log('Папка успешно создана');
+                     });
+                    mv(oldpath, newpath, function (err) {
+                      if (err) throw err;
+                      res.write('File uploaded and moved!');
+                      res.end();
+                })})
+        }})
+
 
 router.get('/auth', authMiddleware,
     async (req, res) => {

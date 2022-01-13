@@ -2,5 +2,5 @@
   "serverPort" : 5000,
   "dbUrl": "mongodb+srv://vladimir:vladimir@cloud.h48cg.mongodb.net/cloud-disk?retryWrites=true&w=majority",
   "secretKey": "mern-secket-key",
-  "filePath": "D:\\myData\\Lavrik\\node_learn1\\disk1\\files"
+  "filePath": "D:\\myData\\Lavrik\\node_learn1\\csvex_uniq\\files"
 }
