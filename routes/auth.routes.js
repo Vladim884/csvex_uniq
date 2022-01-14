@@ -109,10 +109,9 @@ router.post('/login',
             form.parse(req, function (err, fields, files) {
                 console.log(files.filedata.originalFilename)
                 let fullFileName = files.filedata.originalFilename
-                console.log(path.extname(fullFileName))
                 let fileExt = path.extname(fullFileName)
                 if(fileExt !== '.csv') return res.send('Wrong file extension! Select file with ".csv" extension')
-
+                if(!thisId) return res.send('Login to your account')
                 const oldpath = `${files.filedata.filepath}`;
                 console.log(`oldpath: ${oldpath}`)
                 
@@ -123,7 +122,7 @@ router.post('/login',
                 if(fs.existsSync(dirpath)){
                     deleteFolder(dirpath)
                     console.log(dirpath)
-                    console.log('dir was create') 
+                    console.log('dir was delete')
                 } else {
                     console.log('userId-directory does not contain temporary files');
                 }
