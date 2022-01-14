@@ -2,17 +2,17 @@ const Router = require("express")
 const express = require("express")
 const app = express()
 const formidable = require('formidable');
-const rimraf = require('rimraf')
+// const rimraf = require('rimraf')
 
 const User = require("../models/User")
 const bcrypt = require("bcryptjs")
 const config = require("config")
-const  multer = require ( 'multer' ) 
-const fse = require('fs-extra')
+// const  multer = require ( 'multer' ) 
+// const fse = require('fs-extra')
 const fs = require('fs')
-const uuidv1 = require('uuidv1')
+// const uuidv1 = require('uuidv1')
 const path = require('path');
-const shell = require('shelljs');
+// const shell = require('shelljs');
 var mv = require('mv');
 
 
@@ -24,8 +24,8 @@ const jwt = require("jsonwebtoken")
 const {check, validationResult} = require("express-validator")
 const router = new Router()
 const authMiddleware = require('../middleware/auth.middleware')
-const fileService = require('../services/fileService')
-const File = require('../models/File')
+// const fileService = require('../services/fileService')
+// const File = require('../models/File')
 let thisId;
 
 function deleteFolder(p) {
@@ -102,37 +102,42 @@ router.post('/login',
         }
     })
 
-        router.post('/upload', (req, res) => {
-            if (req.url == '/upload') {
-                console.log(req.url)
-                var form = new formidable.IncomingForm();
-                form.parse(req, function (err, fields, files) {
-                    
-                    const oldpath = `${files.filedata.filepath}`;
-                    console.log(`oldpath: ${oldpath}`)
-                    
-                    const dirpath = `${config.get("filePath")}\\${thisId}`
-                    const newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
-                    
-                    
-                    if(fs.existsSync(dirpath)){
-                        deleteFolder(dirpath)
-                        console.log(dirpath)
-                        console.log('dir was create') 
-                    } else {
-                        console.log('userId-directory does not contain temporary files');
-                    }
-   
-                    fs.mkdirSync(`${dirpath}`, err => {
-                        if(err) throw err; // не удалось создать папку
-                        console.log('Папка успешно создана');
-                     });
-                    mv(oldpath, newpath, function (err) {
-                      if (err) throw err;
-                      res.write('File uploaded and moved!');
-                      res.end();
-                })})
-        }})
+    router.post('/upload', (req, res) => {
+        if (req.url == '/upload') {
+            console.log(req.url)
+            const form = new formidable.IncomingForm();
+            form.parse(req, function (err, fields, files) {
+                console.log(files.filedata.originalFilename)
+                let fullFileName = files.filedata.originalFilename
+                console.log(path.extname(fullFileName))
+                let fileExt = path.extname(fullFileName)
+                if(fileExt !== '.csv') return res.send('Wrong file extension! Select file with ".csv" extension')
+
+                const oldpath = `${files.filedata.filepath}`;
+                console.log(`oldpath: ${oldpath}`)
+                
+                const dirpath = `${config.get("filePath")}\\${thisId}`
+                const newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
+                console.log(`newpath: ${newpath}`)
+                
+                if(fs.existsSync(dirpath)){
+                    deleteFolder(dirpath)
+                    console.log(dirpath)
+                    console.log('dir was create') 
+                } else {
+                    console.log('userId-directory does not contain temporary files');
+                }
+
+                fs.mkdirSync(`${dirpath}`, err => {
+                    if(err) throw err; // не удалось создать папку
+                    console.log('Папка успешно создана');
+                    });
+                mv(oldpath, newpath, function (err) {
+                    if (err) throw err;
+                    console.log('File uploaded and moved!')
+                    res.end();
+            })})
+    }})
 
 
 router.get('/auth', authMiddleware,
