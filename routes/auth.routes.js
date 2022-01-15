@@ -1,8 +1,9 @@
 const Router = require("express")
 const express = require("express")
 const app = express()
-const formidable = require('formidable');
+const formidable = require('formidable')
 // const rimraf = require('rimraf')
+const csv = require('csv-parser')
 
 const User = require("../models/User")
 const bcrypt = require("bcryptjs")
@@ -26,7 +27,8 @@ const router = new Router()
 const authMiddleware = require('../middleware/auth.middleware')
 // const fileService = require('../services/fileService')
 // const File = require('../models/File')
-let thisId;
+let thisId
+// let newpath
 
 function deleteFolder(p) {
     let files = [];
@@ -85,7 +87,7 @@ router.post('/login',
                 return res.status(400).json({message: "Invalid password"})
             }
             const token = jwt.sign({id: user.id}, config.get("secretKey"), {expiresIn: "1h"})
-            thisId = user._id;
+            thisId = user._id
             // return res.json({
             //     token,
             //     user: {
@@ -103,20 +105,26 @@ router.post('/login',
     })
 
     router.post('/upload', (req, res) => {
+        let results = []
+        let ind = 0
+        resfind = []
+        resname = []
+        resgroup = []
         if (req.url == '/upload') {
             console.log(req.url)
             const form = new formidable.IncomingForm();
             form.parse(req, function (err, fields, files) {
+                console.log(files)
                 console.log(files.filedata.originalFilename)
                 let fullFileName = files.filedata.originalFilename
                 let fileExt = path.extname(fullFileName)
                 if(fileExt !== '.csv') return res.send('Wrong file extension! Select file with ".csv" extension')
                 if(!thisId) return res.send('Login to your account')
-                const oldpath = `${files.filedata.filepath}`;
+                let oldpath = `${files.filedata.filepath}`;
                 console.log(`oldpath: ${oldpath}`)
                 
-                const dirpath = `${config.get("filePath")}\\${thisId}`
-                const newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
+                let dirpath = `${config.get("filePath")}\\${thisId}`
+                let newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
                 console.log(`newpath: ${newpath}`)
                 
                 if(fs.existsSync(dirpath)){
@@ -134,7 +142,37 @@ router.post('/login',
                 mv(oldpath, newpath, function (err) {
                     if (err) throw err;
                     console.log('File uploaded and moved!')
-                    res.end();
+                    console.log(`mv-newpath: ${newpath}`)
+                    fs.createReadStream(newpath)
+                        .pipe(csv())
+                        .on('data', (data) => {
+                            results.push(data)
+                            // console.log(results[ind])
+                        })
+                        .on('end', () => {
+                
+                            for (let i = 0; i < results.length; i++) {
+                                let data_f = results[i]['Поисковые_запросы'];
+                                let data_n = results[i]['Название_позиции'];
+                                let data_g = results[i]['Название_группы'];
+            
+                                resfind.push(data_f)
+                                resname.push(data_n)
+                                resgroup.push(data_g)
+                            }
+                            let req_name = resname;
+                            let req_group = resgroup;
+                            let req_find = resfind;
+                            res.render("upload1.hbs", {
+                                req_name: req_name,
+                                req_group: req_group,
+                                req_find: req_find,
+                                resfind: resfind,
+                                resname: resname,
+                                resgroup: resgroup
+                            });
+                        });
+                    
             })})
     }})
 
