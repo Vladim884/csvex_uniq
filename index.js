@@ -10,21 +10,23 @@ const config = require("config")
 const authRouter = require("./routes/auth.routes")
 const fileRouter = require("./routes/file.routes")
 const app = express()
-app.use(express.static(__dirname))
+// app.use(express.static(__dirname))
 const PORT = config.get('serverPort')
 const corsMiddleware = require('./middleware/cors.middleware')
 // app.use(multer({dest : 'files/'+ `${fileEndDir}`}).single("filedata"))
+
 app.engine('handlebars', engine({ layoutsDir: "views/layouts", extname: '.hbs', defaultLayout: "layout"}));
 app.set('view engine', 'handlebars');
 hbs.registerPartials(__dirname + "/views/partials");
 app.set("view engine", "hbs");
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // app.use(fileUpload({}))
 app.use(corsMiddleware)
 app.use(express.json())
 
-app.use(express.static(__dirname + '/'))
+app.use(express.static(__dirname + '/public'))
 app.use("/api/auth", authRouter)
 app.use("/api/files", fileRouter)
 
