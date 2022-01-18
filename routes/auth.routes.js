@@ -2,7 +2,9 @@ const Router = require("express")
 const express = require("express")
 const app = express()
 const formidable = require('formidable')
-// const rimraf = require('rimraf')
+const json2csv = require("json2csv");
+const convertCsvToXlsx = require('@aternus/csv-to-xlsx')
+const rimraf = require('rimraf')
 const csv = require('csv-parser')
 
 const User = require("../models/User")
@@ -105,6 +107,9 @@ router.post('/login',
     })
 
     router.post('/upload', (req, res) => {
+        let dirpath
+        
+        let newpath
         let results = []
         let ind = 0
         resfind = []
@@ -123,8 +128,8 @@ router.post('/login',
                 let oldpath = `${files.filedata.filepath}`;
                 console.log(`oldpath: ${oldpath}`)
                 
-                let dirpath = `${config.get("filePath")}\\${thisId}`
-                let newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
+                dirpath = `${config.get("filePath")}\\${thisId}`
+                newpath = `${config.get("filePath")}\\${thisId}\\` + files.filedata.originalFilename
                 console.log(`newpath: ${newpath}`)
                 
                 if(fs.existsSync(dirpath)){
@@ -174,8 +179,49 @@ router.post('/login',
                         });
                     
             })})
-    }})
-
+    }
+    router.post('/upload1', async (req, res) => {
+        console.log('upload-func');
+        if(!req.body) return response.sendStatus(400);
+        console.log(req.body.req_find);
+        for (let i = 0; i < results.length; i++) {
+            console.log("req.body.req_find");
+            console.log(req.body.req_find[i]);
+            results[i]['Поисковые_запросы'] = req.body.req_find[i];
+            results[i]['Название_позиции'] = req.body.req_name[i];
+            results[i]['Название_группы'] = req.body.req_group[i];
+        }
+        let apiDataPull = Promise.resolve(results).then(data => {
+            return json2csv.parseAsync(data, {fields: Object.keys(results[0])})
+        }).then(csv => {
+            //==================
+            let myFirstPromise = new Promise((resolve, reject) => {
+                fs.writeFile('tempResFiles/newcsv.csv', csv, function (err) {
+                    if (err) throw err;
+                    console.log('File Saved!');
+                    ind++;
+                    console.log(ind);
+                    resolve("Temporary files created!");
+                });
+            });
+            myFirstPromise.then((message)=>{
+                let source = path.join(process.cwd(), '/tempResFiles/newcsv.csv');
+                let destination = path.join(process.cwd(), '/tempResFiles/newxl.xlsx');
+                
+                try {
+                convertCsvToXlsx(source, destination);
+                } catch (e) {
+                console.error(e.toString());
+                }
+                rimraf('./files/*', function () { 
+                    console.log('Directory ./files is empty!'); 
+                // !! if you remove the asterisk -> *, this folder will be deleted!
+            });
+                console.log(message);
+            });
+        })
+    })
+})
 
 router.get('/auth', authMiddleware,
     async (req, res) => {
