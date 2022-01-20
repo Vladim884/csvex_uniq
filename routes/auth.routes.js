@@ -195,7 +195,7 @@ router.post('/login',
         }).then(csv => {
             //==================
             let myFirstPromise = new Promise((resolve, reject) => {
-                fs.writeFile(`${dirpath}/newcsv.csv`, csv, function (err) {
+                fs.writeFile(`${dirpath}\\newcsv.csv`, csv, function (err) {
                     if (err) throw err;
                     console.log('File Saved!');
                     ind++;
@@ -204,26 +204,38 @@ router.post('/login',
                 });
             });
             myFirstPromise.then((message)=>{
-                let source = path.join(process.cwd(), `${dirpath}/newcsv.csv`);
-                let destination = path.join(process.cwd(), `${dirpath}/newxl.xlsx`);
+                let source = path.join(`${dirpath}`, 'newcsv.csv')
+                let destination = path.join(`${dirpath}`, 'newxl.xlsx')
                 
                 try {
                 convertCsvToXlsx(source, destination);
                 } catch (e) {
                 console.error(e.toString());
                 }
-                rimraf(`${dirpath}/newxl.xlsx/`+'*', function () { 
-                    console.log('Directory ./files is empty!'); 
-                // !! if you remove the asterisk -> *, this folder will be deleted!
-            });
-                console.log(message);
+                // rimraf(`${dirpath}/newxl.xlsx/`+'*', function () { 
+                //     console.log('Directory ./files is empty!'); 
+                // // !! if you remove the asterisk -> *, this folder will be deleted!
+                // });
+                console.log(message)
             });
         })
     })
 
-    // router.post('/upload1', (req, res) => {
-
-    // }
+    router.get('/upload1', (req, res) => {
+        const file = `${dirpath}newxl.xlsx`
+        csvpath = `${dirpath}newcsv.csv`
+        exelpath = `${dirpath}newxl.xlsx`
+        res.download(file, function () {
+            rimraf(`${dirpath}`+'*', function () { 
+                    console.log('Directory for temp-files is empty!'); 
+                // !! if you remove the asterisk -> *, this folder will be deleted!
+                });
+            // deleteFolder(dirpath)
+        // fs.unlinkSync(csvpath);
+        // fs.unlinkSync(exelpath);
+        console.log('Main directory does not contain temporary csv or exel files')
+        })
+    })
 })
 
 
