@@ -180,19 +180,20 @@ router.post('/login',
             })})
     }
     router.post('/upload1', (req, res) => {
-        console.log('upload-func');
+        // const request = req.body;
+        // let sushi = request.sushi;
+        // console.log(sushi);
         if(!req.body) return response.sendStatus(400);
         console.log(req.body.req_find);
         for (let i = 0; i < results.length; i++) {
-            console.log("req.body.req_find");
+            // console.log("req.body.req_find");
             console.log(req.body.req_find[i]);
             results[i]['Поисковые_запросы'] = req.body.req_find[i];
             results[i]['Название_позиции'] = req.body.req_name[i];
             results[i]['Название_группы'] = req.body.req_group[i];
         }
         let apiDataPull = Promise.resolve(results).then(data => {
-            return json2csv.parseAsync(data, {fields: Object.keys(results[0])})
-        }).then(csv => {
+            return json2csv.parseAsync(data, {fields: Object.keys(results[0])})        }).then(csv => {
             //==================
             let myFirstPromise = new Promise((resolve, reject) => {
                 fs.writeFile(`${dirpath}\\newcsv.csv`, csv, function (err) {
@@ -221,10 +222,20 @@ router.post('/login',
         })
     })
 
-    router.get('/upload1', (req, res) => {
-        const file = `${dirpath}newxl.xlsx`
-        csvpath = `${dirpath}newcsv.csv`
-        exelpath = `${dirpath}newxl.xlsx`
+    router.post('/upload2', (req, res) => {
+        const request = req.body;
+        let sushi = request.sushi;
+        console.log(sushi);
+
+        console.log(`sushi: ${sushi}`)
+        let file
+        if(sushi) {
+            file = `${dirpath}newxl.xlsx`
+        } else {
+            file = `${dirpath}newcsv.csv`
+        }
+        
+        // exelpath = `${dirpath}newxl.xlsx`
         res.download(file, function () {
             rimraf(`${dirpath}`+'*', function () { 
                     console.log('Directory for temp-files is empty!'); 
