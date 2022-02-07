@@ -14,15 +14,7 @@
                 <span><b>название товара:</b></span>
                 <ul>
                     {{#each resname}}
-                        <li class="liname"><textarea  name="req_name" class="name">{{this}}</textarea></li>
-                    {{/each}}
-                </ul>
-            </div>
-            <div class="col">
-                <div><span><b>Поисковые запросы:</b></span></div>
-                <ul>
-                    {{#each resfind}}
-                        <li class="lifind"><textarea name="req_find" class="find">{{this}}</textarea></li>
+                        <li class="liname block"><textarea  name="req_name" class="name">{{this}}</textarea></li>
                     {{/each}}
                 </ul>
             </div>
@@ -30,16 +22,51 @@
                 <div><span><b>Название группы:</b></span></div>
                 <ul>
                     {{#each resgroup}}
-                        <li class="ligroup"><textarea name="req_group" class="group">{{this}}</textarea></li>
+                        <li class="ligroup  block"><textarea name="req_group" class="group">{{this}}</textarea></li>
                     {{/each}}
                 </ul>
+            </div>
+            {{!-- <div class="col">
+                <div><span><b>Поисковые запросы:</b></span></div>
+                <ul>
+                    {{#each resfind}}
+                        <li class="lifind"><textarea name="req_find" class="find">{{this}}</textarea></li>
+                    {{/each}}
+                </ul>
+            </div> --}}
+        </div>
+        <div class="row align-items-end">
+            <div class="col">
+                <div><span><b>Поисковые запросы:</b></span></div>
+                <ul>
+                    {{#each resfind}}
+                        <li class="lifind block">
+                            <textarea name="req_find" class="find">{{this}}</textarea>
+                        </li>
+                            
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col">
+                <div><span><b>Поисковые запросы2:</b></span></div>
+                {{!-- <ul>
+                    {{#each resfind}} --}}
+                        <div class="lifind block">
+                            <textarea name="req_find1" class="find" id="workText"></textarea>
+                        </div>
+                   {{!-- {{/each}}
+                </ul> --}}
             </div>
         </div>
     <input type="submit" value="Отправить" />
 </form>
-    
-<div><button id="find">изм поиск запрос</button></div>
-<form action="/api/auth/upload1" method="get">
+<div>
+    {{!-- <textarea name="req_find1" id="workText"></textarea> --}}
+</div>  
+<div><button id="reqChange">изм поиск запрос</button></div>
+<div><button id="nextItem">next item</button></div>
+<div><button id="joinerWords">joiner words</button></div>
+<form action="/api/auth/upload2" method="post">
     <input type="submit" value="Download" />
 </form> 
 

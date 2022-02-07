@@ -8,3 +8,22 @@ li textarea {
     width: 100%;
     margin-top: 10px;
 }
+
+div textarea {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.col .block {
+    padding: 0 5px 0 50px;
+}
+
+.red {
+    background-color: red;
+    color: red;
+}
+
+::selection {
+    color: red;
+    background: yellow;
+  }

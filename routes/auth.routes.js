@@ -33,6 +33,7 @@ let thisId
 // let newpath
 
 function deleteFolder(p) {
+    console.log('-deleteFolder-')
     let files = [];
     if( fs.existsSync(p) ) {
         files = fs.readdirSync(p);
@@ -130,10 +131,15 @@ router.post('/login',
                 dirpath = `${config.get("filePath")}\\${thisId}\\` // path for dir 'files/thisId' in project-folder
                 newpath = `${dirpath}` + `${files.filedata.originalFilename}` //path for  file .csv in 'files/thisId' in project-folder
                 console.log(`newpath: ${newpath}`)
+                console.log(`dirpath: ${dirpath}`)
                 
                 if(fs.existsSync(dirpath)){
-                    deleteFolder(dirpath)
-                    console.log(dirpath)
+                    deleteFolder(`${dirpath}`)
+                    // rimraf(`${dirpath}`, function () { 
+                    //     console.log('Directory for temp-files is empty!'); 
+                    // // !! if you remove the asterisk -> *, this folder will be deleted!
+                    // })
+                    
                     console.log('dir was delete')
                 } else {
                     console.log('userId-directory does not contain temporary files');
@@ -181,17 +187,18 @@ router.post('/login',
     }
     router.post('/upload1', (req, res) => {
         console.log('upload-func')
-        console.log(results)
+        // console.log(results)
         if(!req.body) return response.sendStatus(400);
         console.log(req.body.req_find);
         for (let i = 0; i < results.length; i++) {
-            console.log("req.body.req_find");
+            // console.log("req.body.req_find");
             console.log(req.body.req_find[i]);
             results[i]['Поисковые_запросы'] = req.body.req_find[i];
             results[i]['Название_позиции'] = req.body.req_name[i];
             results[i]['Название_группы'] = req.body.req_group[i];
         }
         let apiDataPull = Promise.resolve(results).then(data => {
+            console.log(`results[0]: ${results[0]}`)
             return json2csv.parseAsync(data, {fields: Object.keys(results[0])})
         }).then(csv => {
             //==================
@@ -199,8 +206,8 @@ router.post('/login',
                 fs.writeFile(`${dirpath}\\newcsv.csv`, csv, function (err) {
                     if (err) throw err;
                     console.log('File Saved!');
-                    ind++;
-                    console.log(ind);
+                    // ind++;
+                    // console.log(ind);
                     resolve("Temporary files created!");
                 });
             });
@@ -222,20 +229,26 @@ router.post('/login',
         })
     })
 
-    router.get('/upload1', (req, res) => {
+    router.post('/upload2', (req, res) => {
+        console.log(`dirpath u[l1 : ${dirpath}]`)
         const file = `${dirpath}newxl.xlsx`
-        csvpath = `${dirpath}newcsv.csv`
-        exelpath = `${dirpath}newxl.xlsx`
-        res.download(file, function () {
-            rimraf(`${dirpath}`+'*', function () { 
-                    console.log('Directory for temp-files is empty!'); 
-                // !! if you remove the asterisk -> *, this folder will be deleted!
-                });
-            // deleteFolder(dirpath)
-        // fs.unlinkSync(csvpath);
-        // fs.unlinkSync(exelpath);
-        console.log('Main directory does not contain temporary csv or exel files')
+        // async  () => {
+            res.download(`${dirpath}\\newxl.xlsx`, function () {
+            // rimraf(`${dirpath}` + '*', function () { 
+            //         console.log('Directory for temp-files is empty!'); 
+            //     // !! if you remove the asterisk -> *, this folder will be deleted!
+            //     })
+            let csvpath = `${dirpath}newcsv.csv`
+            let exelpath = `${dirpath}newxl.xlsx`   
+        fs.unlinkSync(csvpath)
+        fs.unlinkSync(exelpath)
+        console.log(`last-newpath: ${newpath}`)
+        fs.unlinkSync(newpath)
+        // deleteFolder(dirpath)
         })
+        // return res.send('<a href="/">hello</a>')
+    // }
+       
     })
 })
 
