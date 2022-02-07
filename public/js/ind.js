@@ -3,6 +3,7 @@ console.log('start my site!')
 const but_reqChange = document.getElementById('reqChange')
 const but_nextItem = document.getElementById('nextItem')
 const but_joinerWords = document.getElementById('joinerWords')
+const but_mainPhrase = document.getElementById('mainPhrase')
 
 let linamear = document.getElementsByClassName('liname');
 let namear = document.getElementsByClassName('name');
@@ -81,7 +82,7 @@ but_reqChange.onclick = function () {
     
     // Перевод всех букв в нижний регистр
     thisfind.value = thisfind.value.toLowerCase()
-    workText.value = thisfind.value
+    // workText.value = thisfind.value
 
 
 
@@ -90,10 +91,19 @@ but_reqChange.onclick = function () {
 }
 but_joinerWords.onclick = () => {
         let subs = thisfind.value.substring(thisfind.selectionStart, thisfind.selectionEnd);
-        subs = subs.split(' ').join('&nbsp;');
-        workText.value = thisfind.value.substring(0, thisfind.selectionStart) + 
+        subs = subs.split(' ').join('&nbsp;')
+        thisfind.value = thisfind.value.substring(0, thisfind.selectionStart) + 
         subs +
         thisfind.value.substring(thisfind.selectionEnd, thisfind.length);
+}
+
+but_mainPhrase.onclick = () => {
+    let subs = thisfind.value.substring(thisfind.selectionStart, thisfind.selectionEnd);
+    // subs = subs.split(' ').join('&nbsp;')
+    subs = subs.split(' ')
+    alert(subs)
+    let main_phrase = `${subs[0]} ${subs[subs.length-1]}`
+    workText.value =  main_phrase  
 }
 
 

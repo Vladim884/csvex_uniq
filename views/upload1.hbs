@@ -42,6 +42,7 @@
                     {{#each resfind}}
                         <li class="lifind block">
                             <textarea name="req_find" class="find">{{this}}</textarea>
+                            {{!-- <input name="action" onclick="history.back()" type="submit" value="Cancel"/> --}}
                         </li>
                             
                     {{/each}}
@@ -66,6 +67,7 @@
 <div><button id="reqChange">изм поиск запрос</button></div>
 <div><button id="nextItem">next item</button></div>
 <div><button id="joinerWords">joiner words</button></div>
+<div><button id="mainPhrase">main phrase</button></div>
 <form action="/api/auth/upload2" method="post">
     <input type="submit" value="Download" />
 </form> 
