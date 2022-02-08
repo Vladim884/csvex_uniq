@@ -1,6 +1,6 @@
 
 console.log('start my site!')
-const but_reqChange = document.getElementById('reqChange')
+const but_firstReqChange = document.getElementById('reqChange')
 const but_nextItem = document.getElementById('nextItem')
 const but_joinerWords = document.getElementById('joinerWords')
 const but_mainPhrase = document.getElementById('mainPhrase')
@@ -22,6 +22,16 @@ let thisfind
 let thisgroup
 
 let index = 0;
+
+
+but_firstReqChange.onclick = () => {
+    thisfind.value = thisfind.value.trim()
+    let str = thisfind.value
+    alert(str)
+    let arrFindReq = str.split(" ")
+    alert(arrFindReq)
+    console.log(arrFindReq)
+}
 function displCurrentData() {
     for (let i = 0; i < linamear.length; i++) {
         if(index === linamear.length){
@@ -50,7 +60,7 @@ function displCurrentData() {
 }
 document.addEventListener('DOMContentLoaded', function(){
     displCurrentData()
-    but_reqChange.onclick()
+    initialReqChange()
 });
 
 
@@ -58,9 +68,10 @@ but_nextItem.onclick = () => {
     index++
     if(index)
     displCurrentData()
-    but_reqChange.onclick()
+    initialReqChange()
+    workText.value = ''
 }
-but_reqChange.onclick = function () {
+const initialReqChange = function () {
     thisname = document.getElementById('nameid'+index);
     thisfind = document.getElementById('findid'+index);
     thisgroup = document.getElementById('groupid'+index);
@@ -91,7 +102,8 @@ but_reqChange.onclick = function () {
 }
 but_joinerWords.onclick = () => {
         let subs = thisfind.value.substring(thisfind.selectionStart, thisfind.selectionEnd);
-        subs = subs.split(' ').join('&nbsp;')
+        // subs = subs.split(' ').join('&nbsp;')
+        subs = subs.split(' ').join('_')
         thisfind.value = thisfind.value.substring(0, thisfind.selectionStart) + 
         subs +
         thisfind.value.substring(thisfind.selectionEnd, thisfind.length);
@@ -105,5 +117,9 @@ but_mainPhrase.onclick = () => {
     let main_phrase = `${subs[0]} ${subs[subs.length-1]}`
     workText.value =  main_phrase  
 }
+
+
+
+
 
 

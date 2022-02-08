@@ -186,20 +186,29 @@ router.post('/login',
             })})
     }
     router.post('/upload1', (req, res) => {
+        console.log(`${dirpath}\\newcsv.csv`)
+        if(fs.existsSync(`${dirpath}\\newcsv.csv`)) {
+            fs.unlinkSync(`${dirpath}\\newcsv.csv`)
+            console.log('csv deleted')
+        } 
+        if (fs.existsSync(`${dirpath}\\newxl.xlsx`)) {
+            fs.unlinkSync(`${dirpath}\\newxl.xlsx`)
+            console.log('xl deleted')
+        } 
         console.log('upload-func')
         // console.log(results)
         if(!req.body) return response.sendStatus(400);
         console.log(req.body.req_find);
         for (let i = 0; i < results.length; i++) {
-            // console.log("req.body.req_find");
+            console.log("req.body.req_find:")
             console.log(req.body.req_find[i]);
             results[i]['Поисковые_запросы'] = req.body.req_find[i];
             results[i]['Название_позиции'] = req.body.req_name[i];
             results[i]['Название_группы'] = req.body.req_group[i];
         }
         let apiDataPull = Promise.resolve(results).then(data => {
-            console.log(`results[0]: ${results[0]}`)
-            return json2csv.parseAsync(data, {fields: Object.keys(results[0])})
+            console.log(`results[0]: ${Object.keys(results[0])}`)
+            return json2csv.parseAsync(data, {fields: Object.keys(results[0])}) // right variant
         }).then(csv => {
             //==================
             let myFirstPromise = new Promise((resolve, reject) => {
@@ -218,7 +227,7 @@ router.post('/login',
                 try {
                 convertCsvToXlsx(source, destination);
                 } catch (e) {
-                console.error(e.toString());
+                console.error(e.toString())
                 }
                 // rimraf(`${dirpath}/newxl.xlsx/`+'*', function () { 
                 //     console.log('Directory ./files is empty!'); 
@@ -227,6 +236,7 @@ router.post('/login',
                 console.log(message)
             });
         })
+    
     })
 
     router.post('/upload2', (req, res) => {
