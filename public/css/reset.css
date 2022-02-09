@@ -24,6 +24,11 @@ div textarea {
 }
 
 ::selection {
-    color: red;
+    color: blue;
     background: yellow;
-  }
+}
+
+.croup {
+    margin-left: 50px;
+    width: 90%;
+}

@@ -11,7 +11,8 @@ console.log(namear)
 
 let lifindar = document.getElementsByClassName('lifind')
 let findar = document.getElementsByClassName('find')
-let workText = document.getElementById('workText')
+let groupFindReq1 = document.getElementById('group1')
+let mainPhrase1 = document.getElementById('mainphrase')
 
 
 let ligroupar = document.getElementsByClassName('ligroup');
@@ -25,12 +26,25 @@ let index = 0;
 
 
 but_firstReqChange.onclick = () => {
-    thisfind.value = thisfind.value.trim()
-    let str = thisfind.value
-    alert(str)
-    let arrFindReq = str.split(" ")
+    groupFindReq1.value = groupFindReq1.value.trim()// строка поисковых запросов
+    mainPhrase1.value = mainPhrase1.value.trim()// строка главной фразы №1
+    let arrFindReq = groupFindReq1.value.split(" ") // перевод строки group1 в массив с разделителем " "
+    let arMainPhr = mainPhrase1.value.split(" ") // перевод строки mainPhrase в массив с разделителем " "
+    for (let i = 0; i < arrFindReq.length; i++) { // удаление одинаковых слов из mainPhrase в group1  
+        if (arrFindReq[i] === arMainPhr[0] || arrFindReq[i] === arMainPhr[1]) {
+            arrFindReq.splice(i, 1) // full deleting from arrey
+        }
+    }
     alert(arrFindReq)
     console.log(arrFindReq)
+
+    let str1 = mainPhrase1.value + ', '
+    console.log(`str1: ${str1}`)
+    alert(str1)
+    for (let i = 0; i < arrFindReq.length; i++) {
+        str1 += arMainPhr[0] + ' ' + arrFindReq[i] + ', '
+    }
+    alert(str1)
 }
 function displCurrentData() {
     for (let i = 0; i < linamear.length; i++) {
@@ -69,7 +83,7 @@ but_nextItem.onclick = () => {
     if(index)
     displCurrentData()
     initialReqChange()
-    workText.value = ''
+    mainPhrase1.value = ''
 }
 const initialReqChange = function () {
     thisname = document.getElementById('nameid'+index);
@@ -81,41 +95,39 @@ const initialReqChange = function () {
     let thisFindValue = thisfind.value;
     let thisGroupValue = thisgroup.value;
 
-    thisfind.value = `${thisNameValue} ${thisFindValue} ${thisGroupValue}`
+    groupFindReq1.value = `${thisNameValue}`
+    groupFindReq1.value = thisNameValue
+    // thisfind.value = `${thisNameValue} ${thisFindValue} ${thisGroupValue}`
+
     // Удаление знаков препинания:
     //оставить скобки () и дефис -
-    thisfind.value = thisfind.value.replace(/[\.,\/#!$%\^&\*;:{}=\_`~@\+\?><\[\]\+]/g, '')
+    groupFindReq1.value = groupFindReq1.value.replace(/[\.,\/#!$%\^&\*;:{}=\_`~@\+\?><\[\]\+]/g, '')
     ////без скобок () и дефиса -
     // thisfind.value = thisfind.value.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+]/g, '')
     
     //замена дефиса "-" на пробел
-    thisfind.value = thisfind.value.replace(/-/g, ' ');
+    groupFindReq1.value = groupFindReq1.value.replace(/-/g, ' ');
     
     // Перевод всех букв в нижний регистр
-    thisfind.value = thisfind.value.toLowerCase()
-    // workText.value = thisfind.value
+    groupFindReq1.value = groupFindReq1.value.toLowerCase()
 
-
-
-    // index++
     if(index>linamear.length-1) but_find.disabled = true
 }
 but_joinerWords.onclick = () => {
-        let subs = thisfind.value.substring(thisfind.selectionStart, thisfind.selectionEnd);
+        let subs = groupFindReq1.value.substring(groupFindReq1.selectionStart, groupFindReq1.selectionEnd);
         // subs = subs.split(' ').join('&nbsp;')
         subs = subs.split(' ').join('_')
-        thisfind.value = thisfind.value.substring(0, thisfind.selectionStart) + 
+        groupFindReq1.value = groupFindReq1.value.substring(0, groupFindReq1.selectionStart) + 
         subs +
-        thisfind.value.substring(thisfind.selectionEnd, thisfind.length);
+        groupFindReq1.value.substring(groupFindReq1.selectionEnd, groupFindReq1.length);
 }
 
 but_mainPhrase.onclick = () => {
-    let subs = thisfind.value.substring(thisfind.selectionStart, thisfind.selectionEnd);
+    let subs = groupFindReq1.value.substring(groupFindReq1.selectionStart, groupFindReq1.selectionEnd);
     // subs = subs.split(' ').join('&nbsp;')
     subs = subs.split(' ')
     alert(subs)
-    let main_phrase = `${subs[0]} ${subs[subs.length-1]}`
-    workText.value =  main_phrase  
+    mainPhrase1.value = `${subs[0]} ${subs[subs.length-1]}`
 }
 
 

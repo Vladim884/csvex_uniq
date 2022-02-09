@@ -26,36 +26,30 @@
                     {{/each}}
                 </ul>
             </div>
-            {{!-- <div class="col">
-                <div><span><b>Поисковые запросы:</b></span></div>
-                <ul>
-                    {{#each resfind}}
-                        <li class="lifind"><textarea name="req_find" class="find">{{this}}</textarea></li>
-                    {{/each}}
-                </ul>
-            </div> --}}
-        </div>
-        <div class="row align-items-end">
             <div class="col">
                 <div><span><b>Поисковые запросы:</b></span></div>
                 <ul>
                     {{#each resfind}}
                         <li class="lifind block">
                             <textarea name="req_find" class="find">{{this}}</textarea>
-                            {{!-- <input name="action" onclick="history.back()" type="submit" value="Cancel"/> --}}
                         </li>
-                            
                     {{/each}}
                 </ul>
+            </div>
+        </div>
+        <div class="row align-items-end">
+            <div class="col">
+                <div><span><b>1 Group</b></span></div>
+                    <div>
+                        <textarea name="req_find2" class="croup" id="group1"></textarea>
+                    </div>
             </div>
             <div class="col">
                 <div><span><b>Ключевая фраза 1:</b></span></div>
                 <ul>
-                    {{!-- {{#each resfind}} --}}
-                        <div class="lifind block">
-                            <input name="req_find1" class="find" id="workText" />
-                        </div>
-                   {{!-- {{/each}} --}}
+                    <div class="lifind block">
+                        <input name="req_find1" class="find" id="mainphrase" />
+                    </div>
                 </ul>
             </div>
         </div>
