@@ -38,13 +38,51 @@ but_firstReqChange.onclick = () => {
     alert(arrFindReq)
     console.log(arrFindReq)
 
-    let str1 = mainPhrase1.value + ', '
+    let str1 = `${mainPhrase1.value}, ${arMainPhr[1]} ${arMainPhr[0]}, `
     console.log(`str1: ${str1}`)
     alert(str1)
     for (let i = 0; i < arrFindReq.length; i++) {
-        str1 += arMainPhr[0] + ' ' + arrFindReq[i] + ', '
+        str1 += `${arMainPhr[0]} ${arrFindReq[i]}, ${arrFindReq[i]} ${arMainPhr[0]}, `
+        str1 += `${arMainPhr[0]} ${arMainPhr[1]} ${arrFindReq[i]}, `
+        str1 += `${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i]}, `
+        str1 += `${arMainPhr[0]}  ${arrFindReq[i]} ${arMainPhr[1]}, `
+        if(arrFindReq[i+1]){
+            str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i]} ${arrFindReq[i+1]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i]}  ${arMainPhr[1]} ${arrFindReq[i+1]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i]} ${arrFindReq[i+1]}  ${arMainPhr[1]}, `    
+            str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i]} ${arrFindReq[i+1]}, `    
+        }
+        if(arrFindReq[i+2]){
+            str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i]} ${arrFindReq[i+2]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i]}  ${arMainPhr[1]} ${arrFindReq[i+2]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i]} ${arrFindReq[i+2]}  ${arMainPhr[1]}, `    
+            str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i]} ${arrFindReq[i+2]}, `
+            
+            str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i+1]} ${arrFindReq[i+2]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i+1]}  ${arMainPhr[1]} ${arrFindReq[i+2]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i+1]} ${arrFindReq[i+2]}  ${arMainPhr[1]}, `    
+            str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i+1]} ${arrFindReq[i+2]}, `
+        }
+        if(arrFindReq[i+3]) {
+            str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i]} ${arrFindReq[i+3]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i]}  ${arMainPhr[1]} ${arrFindReq[i+3]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i]} ${arrFindReq[i+3]}  ${arMainPhr[1]}, `    
+            str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i]} ${arrFindReq[i+3]}, `
+
+            str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i+1]} ${arrFindReq[i+3]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i+1]}  ${arMainPhr[1]} ${arrFindReq[i+3]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i+1]} ${arrFindReq[i+3]}  ${arMainPhr[1]}, `    
+            str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i+1]} ${arrFindReq[i+3]}, `
+
+            str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i+2]} ${arrFindReq[i+3]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i+2]}  ${arMainPhr[1]} ${arrFindReq[i+3]}, `    
+            str1 += `${arMainPhr[0]} ${arrFindReq[i+2]} ${arrFindReq[i+3]}  ${arMainPhr[1]}, `    
+            str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i+2]} ${arrFindReq[i+3]}, `
+        }
+           
     }
     alert(str1)
+    console.log(str1)
 }
 function displCurrentData() {
     for (let i = 0; i < linamear.length; i++) {
