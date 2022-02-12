@@ -4,6 +4,9 @@ const but_firstReqChange = document.getElementById('reqChange')
 const but_nextItem = document.getElementById('nextItem')
 const but_joinerWords = document.getElementById('joinerWords')
 const but_mainPhrase = document.getElementById('mainPhrase')
+const but_swapPlaces = document.getElementById('swap')
+
+
 
 let linamear = document.getElementsByClassName('liname');
 let namear = document.getElementsByClassName('name');
@@ -77,12 +80,15 @@ but_firstReqChange.onclick = () => {
             str1 += `${arMainPhr[0]}  ${arMainPhr[1]} ${arrFindReq[i+2]} ${arrFindReq[i+3]}, `    
             str1 += `${arMainPhr[0]} ${arrFindReq[i+2]}  ${arMainPhr[1]} ${arrFindReq[i+3]}, `    
             str1 += `${arMainPhr[0]} ${arrFindReq[i+2]} ${arrFindReq[i+3]}  ${arMainPhr[1]}, `    
+            
             str1 += ` ${arMainPhr[1]} ${arMainPhr[0]} ${arrFindReq[i+2]} ${arrFindReq[i+3]}, `
         }
            
     }
-    alert(str1)
-    console.log(str1)
+    let resStr1 = str1.split('_').join(' ').split('  ').join(' ')
+    console.log(resStr1)
+    thisfind.value = `${thisfind.value}, ${resStr1}`
+    
 }
 function displCurrentData() {
     for (let i = 0; i < linamear.length; i++) {
@@ -118,7 +124,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
 but_nextItem.onclick = () => {
     index++
-    if(index)
+    if(index === linamear.length) {
+        but_nextItem.disabled = true
+    }
     displCurrentData()
     initialReqChange()
     mainPhrase1.value = ''
@@ -166,6 +174,13 @@ but_mainPhrase.onclick = () => {
     subs = subs.split(' ')
     alert(subs)
     mainPhrase1.value = `${subs[0]} ${subs[subs.length-1]}`
+}
+
+but_swapPlaces.onclick = () => {
+    alert('swap')
+    let arMainPhrase = mainPhrase1.value.split(" ")
+
+    mainPhrase1.value = `${arMainPhrase[1]} ${arMainPhrase[0]}`
 }
 
 

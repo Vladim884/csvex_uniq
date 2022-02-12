@@ -40,28 +40,35 @@
         <div class="row align-items-end">
             <div class="col">
                 <div><span><b>1 Group</b></span></div>
-                    <div>
-                        <textarea name="req_find2" class="croup" id="group1"></textarea>
-                    </div>
+                <div>
+                    <textarea name="req_find2" id="group1" class="group"></textarea>
+                </div>
+                <div class="group">
+                    <button id="nextItem" type="button">next</button>
+                    <button id="joinerWords" type="button">join</button>
+                    <button id="reqChange"  type="button">change</button>
+                    <button id="mainPhrase">main phrase</button>
+                </div>
             </div>
             <div class="col">
                 <div><span><b>Ключевая фраза 1:</b></span></div>
                 <ul>
                     <div class="lifind block">
                         <input name="req_find1" class="find" id="mainphrase" />
+                        <button id="swap" type="button"><></button>
                     </div>
                 </ul>
             </div>
         </div>
-    <input type="submit" value="Сохранить изменения" />
+    <input type="submit" value="Save" />
 </form>
 <div>
     {{!-- <textarea name="req_find1" id="workText"></textarea> --}}
 </div>  
-<div><button id="reqChange">изм поиск запрос</button></div>
-<div><button id="nextItem">next item</button></div>
-<div><button id="joinerWords">joiner words</button></div>
-<div><button id="mainPhrase">main phrase</button></div>
+
+{{!-- <div></div>
+<div></div>
+<div></div> --}}
 <form action="/api/auth/upload2" method="post">
     <input type="submit" value="Download" />
 </form> 
