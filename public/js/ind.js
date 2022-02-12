@@ -121,7 +121,7 @@ function displCurrentData() {
 
 const characterCount = (strX) => {
     let countChar = strX.replace(/[\s,]/g, '').length
-    // countBlock.innerHTML = countChar
+    countBlock.innerHTML = `Количество символов: ${countChar}`
     alert(countChar)
 }
 
@@ -140,6 +140,7 @@ but_nextItem.onclick = () => {
     displCurrentData()
     initialReqChange()
     mainPhrase1.value = ''
+    characterCount(thisfind.value)
 }
 const initialReqChange = function () {
     thisname = document.getElementById('nameid'+index);
