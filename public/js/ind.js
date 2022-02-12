@@ -6,10 +6,10 @@ const but_joinerWords = document.getElementById('joinerWords')
 const but_mainPhrase = document.getElementById('mainPhrase')
 const but_swapPlaces = document.getElementById('swap')
 
+const countBlock = document.getElementById('count')
 
-
-let linamear = document.getElementsByClassName('liname');
-let namear = document.getElementsByClassName('name');
+let linamear = document.getElementsByClassName('liname')
+let namear = document.getElementsByClassName('name')
 console.log(namear)
 
 let lifindar = document.getElementsByClassName('lifind')
@@ -88,6 +88,8 @@ but_firstReqChange.onclick = () => {
     let resStr1 = str1.split('_').join(' ').split('  ').join(' ')
     console.log(resStr1)
     thisfind.value = `${thisfind.value}, ${resStr1}`
+    characterCount(thisfind.value)
+    
     
 }
 function displCurrentData() {
@@ -116,9 +118,17 @@ function displCurrentData() {
         console.log('ok');
     }
 }
+
+const characterCount = (strX) => {
+    let countChar = strX.replace(/[\s,]/g, '').length
+    // countBlock.innerHTML = countChar
+    alert(countChar)
+}
+
 document.addEventListener('DOMContentLoaded', function(){
     displCurrentData()
     initialReqChange()
+    characterCount(thisfind.value)
 });
 
 

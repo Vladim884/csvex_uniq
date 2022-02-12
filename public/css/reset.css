@@ -32,3 +32,10 @@ div textarea {
     margin-left: 50px;
     width: 90%;
 }
+
+#count {
+    display: inline-block;
+    width: 30px;
+    height: 20px;
+    border: 1px solid gray;
+}
