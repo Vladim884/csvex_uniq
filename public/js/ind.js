@@ -1,5 +1,6 @@
 
 console.log('start my site!')
+const checkbox = document.getElementById('checkbox')
 const but_firstReqChange = document.getElementById('reqChange')
 const but_nextItem = document.getElementById('nextItem')
 const but_joinerWords = document.getElementById('joinerWords')
@@ -26,7 +27,16 @@ let thisfind
 let thisgroup
 
 let newFoundValue
-
+checkbox.onclick = () => {
+    if (checkbox.checked) {
+        but_joinerWords.disabled = true
+        but_mainPhrase.disabled = false
+    }
+    else {
+        but_joinerWords.disabled = false
+        but_mainPhrase.disabled = true
+    }
+}
 let index = 0;
 
 
@@ -36,6 +46,9 @@ but_firstReqChange.onclick = () => {
     mainPhrase1.value = mainPhrase1.value.trim()// строка главной фразы №1
     // let arrFindReq = groupFindReq1.value.split(" ") // перевод строки group1 в массив с разделителем " "
     let arrFindReq = newFoundValue.split(" ") // перевод строки group1 в массив с разделителем " "
+    // arrFindReq = arrFindReq.filter(function (item, position, array) {
+    //     return array.lastIndexOf(item) === position; // вернём уникальные элементы
+    //   })
     let arMainPhr = mainPhrase1.value.split(" ") // перевод строки mainPhrase в массив с разделителем " "
     // for (let i = 0; i < arrFindReq.length; i++) { // удаление одинаковых слов из mainPhrase в group1  
     //     if (arrFindReq[i] === arMainPhr[0] || arrFindReq[i] === arMainPhr[1]) {
@@ -43,7 +56,7 @@ but_firstReqChange.onclick = () => {
     //     }
     // }
     // alert(arrFindReq)
-    // console.log(arrFindReq)
+    console.log(`arrFindReq:${arrFindReq}`)
 
     let str1 = `${mainPhrase1.value}, ${arMainPhr[1]} ${arMainPhr[0]}, `
     console.log(`str1: ${str1}`)
@@ -176,6 +189,7 @@ const initialReqChange = function () {
     if(index>linamear.length-1) but_find.disabled = true
 }
 but_joinerWords.onclick = () => {
+    
         let subs = groupFindReq1.value.substring(groupFindReq1.selectionStart, groupFindReq1.selectionEnd);
         // subs = subs.split(' ').join('&nbsp;')
         subs = subs.split(' ').join('_')
@@ -191,7 +205,7 @@ but_mainPhrase.onclick = () => {
     alert(subs)
     mainPhrase1.value = `${subs[0]} ${subs[subs.length-1]}`
     let ar = groupFindReq1.value.split(' ')
-    alert(ar)
+    alert(`ar: ${ar}`)
     alert(subs[0])
     alert(subs[1])
     // let ar1 = ar
