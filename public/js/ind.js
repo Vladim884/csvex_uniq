@@ -25,21 +25,25 @@ let thisname
 let thisfind
 let thisgroup
 
+let newFoundValue
+
 let index = 0;
 
 
 but_firstReqChange.onclick = () => {
-    groupFindReq1.value = groupFindReq1.value.trim()// строка поисковых запросов
+    // groupFindReq1.value = groupFindReq1.value.trim()// строка поисковых запросов
+    newFoundValue = newFoundValue.trim()// строка поисковых запросов
     mainPhrase1.value = mainPhrase1.value.trim()// строка главной фразы №1
-    let arrFindReq = groupFindReq1.value.split(" ") // перевод строки group1 в массив с разделителем " "
+    // let arrFindReq = groupFindReq1.value.split(" ") // перевод строки group1 в массив с разделителем " "
+    let arrFindReq = newFoundValue.split(" ") // перевод строки group1 в массив с разделителем " "
     let arMainPhr = mainPhrase1.value.split(" ") // перевод строки mainPhrase в массив с разделителем " "
-    for (let i = 0; i < arrFindReq.length; i++) { // удаление одинаковых слов из mainPhrase в group1  
-        if (arrFindReq[i] === arMainPhr[0] || arrFindReq[i] === arMainPhr[1]) {
-            arrFindReq.splice(i, 1) // full deleting from arrey
-        }
-    }
-    alert(arrFindReq)
-    console.log(arrFindReq)
+    // for (let i = 0; i < arrFindReq.length; i++) { // удаление одинаковых слов из mainPhrase в group1  
+    //     if (arrFindReq[i] === arMainPhr[0] || arrFindReq[i] === arMainPhr[1]) {
+    //         arrFindReq.splice(i, 1) // full deleting from arrey
+    //     }
+    // }
+    // alert(arrFindReq)
+    // console.log(arrFindReq)
 
     let str1 = `${mainPhrase1.value}, ${arMainPhr[1]} ${arMainPhr[0]}, `
     console.log(`str1: ${str1}`)
@@ -85,12 +89,13 @@ but_firstReqChange.onclick = () => {
         }
            
     }
+    str1 = str1.toLowerCase()
+    thisfind.value = thisfind.value.toLowerCase()
     let resStr1 = str1.split('_').join(' ').split('  ').join(' ')
     console.log(resStr1)
-    thisfind.value = `${thisfind.value}, ${resStr1}`
+    // thisfind.value = `${thisfind.value}, ${resStr1}`
+    thisfind.value = resStr1
     characterCount(thisfind.value)
-    
-    
 }
 function displCurrentData() {
     for (let i = 0; i < linamear.length; i++) {
@@ -152,7 +157,7 @@ const initialReqChange = function () {
     let thisFindValue = thisfind.value;
     let thisGroupValue = thisgroup.value;
 
-    groupFindReq1.value = `${thisNameValue}`
+    // groupFindReq1.value = `${thisNameValue}`
     groupFindReq1.value = thisNameValue
     // thisfind.value = `${thisNameValue} ${thisFindValue} ${thisGroupValue}`
 
@@ -185,6 +190,24 @@ but_mainPhrase.onclick = () => {
     subs = subs.split(' ')
     alert(subs)
     mainPhrase1.value = `${subs[0]} ${subs[subs.length-1]}`
+    let ar = groupFindReq1.value.split(' ')
+    alert(ar)
+    alert(subs[0])
+    alert(subs[1])
+    // let ar1 = ar
+    for (let i = 0; i < ar.length; i++) {
+        if (ar[i] === subs[0]){
+            ar.splice(i, 1)
+        } 
+    }
+    for (let i = 0; i < ar.length; i++) {
+        if (ar[i] === subs[1]){
+            ar.splice(i, 1)
+        } 
+    }
+    alert(ar)
+    // groupFindReq1.value = ar.join(' ')
+    newFoundValue = ar.join(' ')
 }
 
 but_swapPlaces.onclick = () => {
@@ -192,6 +215,13 @@ but_swapPlaces.onclick = () => {
     let arMainPhrase = mainPhrase1.value.split(" ")
 
     mainPhrase1.value = `${arMainPhrase[1]} ${arMainPhrase[0]}`
+}
+
+function arrayRemove(arr, value) { 
+    
+    return arr.filter(function(ele){ 
+        return ele != value; 
+    });
 }
 
 

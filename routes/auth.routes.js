@@ -163,7 +163,7 @@ router.post('/login',
                 
                             for (let i = 0; i < results.length; i++) {
                                 let data_f = results[i]['Поисковые_запросы'];
-                                let data_n = results[i]['Название_позиции'];
+                                let data_n = `${results[i]['Название_позиции']} ${results[i]['Поисковые_запросы']} ${results[i]['Название_группы']}`;
                                 let data_g = results[i]['Название_группы'];
             
                                 resfind.push(data_f)
