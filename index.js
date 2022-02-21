@@ -3,8 +3,9 @@ const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 // const multer  = require("multer");
 
-const hbs = require("hbs");
-const { engine } = require('express-handlebars');
+const hbs = require("hbs")
+const expressHbs = require("express-handlebars")
+// const { engine } = require('express-handlebars')
 const config = require("config")
 // const fileUpload = require("express-fileupload")
 const authRouter = require("./routes/auth.routes")
@@ -14,11 +15,24 @@ const app = express()
 const PORT = config.get('serverPort')
 const corsMiddleware = require('./middleware/cors.middleware')
 // app.use(multer({dest : 'files/'+ `${fileEndDir}`}).single("filedata"))
-
-app.engine('handlebars', engine({ layoutsDir: "views/layouts", extname: '.hbs', defaultLayout: "layout"}));
-app.set('view engine', 'handlebars');
-hbs.registerPartials(__dirname + "/views/partials");
+app.engine("hbs", expressHbs.engine(
+    {
+        layoutsDir: "views/layouts", 
+        defaultLayout: "layout",
+        extname: "hbs"
+    }
+))
+// app.engine('handlebars', engine(
+//     { 
+//         layoutsDir: "views/layouts", 
+//         extname: '.hbs', 
+//         defaultLayout: "layout"
+//     }
+// ));
+// app.set('view engine', 'handlebars');
 app.set("view engine", "hbs");
+hbs.registerPartials(__dirname + "/views/partials");
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -30,10 +44,13 @@ app.use(express.static(__dirname + '/public'))
 app.use("/api/auth", authRouter)
 app.use("/api/files", fileRouter)
 
-app.use("/contact", function(request, response){
-     
-    res.render("contact.hbs")
-})
+app.use("/contacts", function(_, res){
+    res.render("contacts", {
+        title: "Мои контакты",
+        email: "gavgav@mycorp.com",
+        phone: "+1234567890"
+    });
+});
 app.use("/login", function(req, res){
     res.render('login.hbs')
 })

@@ -202,26 +202,29 @@ but_mainPhrase.onclick = () => {
     let subs = groupFindReq1.value.substring(groupFindReq1.selectionStart, groupFindReq1.selectionEnd);
     // subs = subs.split(' ').join('&nbsp;')
     subs = subs.split(' ')
-    alert(subs)
+    // alert(subs)
     mainPhrase1.value = `${subs[0]} ${subs[subs.length-1]}`
     let ar = groupFindReq1.value.split(' ')
-    alert(`ar: ${ar}`)
-    alert(subs[0])
-    alert(subs[1])
+    // alert(`ar: ${ar}`)
+    // alert(subs[0])
+    // alert(subs[1])
     // let ar1 = ar
     for (let i = 0; i < ar.length; i++) {
-        if (ar[i] === subs[0]){
-            ar.splice(i, 1)
-        } 
-    }
-    for (let i = 0; i < ar.length; i++) {
-        if (ar[i] === subs[1]){
+        if (ar[i] === subs[0] || ar[i] === subs[subs.length-1]){
             ar.splice(i, 1)
         } 
     }
     alert(ar)
+    // for (let i = 0; i < ar.length; i++) {
+    //     if (ar[i] === subs[1]){
+    //         ar.splice(i, 1)
+    //     } 
+    // }
+    // alert(ar)
     // groupFindReq1.value = ar.join(' ')
     newFoundValue = ar.join(' ')
+    
+    but_firstReqChange.disabled = false
 }
 
 but_swapPlaces.onclick = () => {
