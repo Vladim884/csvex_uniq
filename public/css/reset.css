@@ -1,3 +1,8 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
 ul, li {
     list-style: none;
     padding: 0;
@@ -9,13 +14,29 @@ li textarea {
     margin-top: 10px;
 }
 
+button {
+  margin-bottom: 10px;
+}
+
+.contain {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* если нужно выравнивание по вертикали */
+}
+
+.row .border {
+  border-bottom: 2px solid gray;
+  margin-bottom: 10px;
+}
+
 div textarea {
     width: 100%;
     margin-top: 10px;
 }
 
 .col .block {
-    padding: 0 5px 0 50px;
+    padding: 0 5px 0 5px;
 }
 
 .red {
@@ -29,16 +50,19 @@ div textarea {
 }
 
 .group {
-    margin-left: 50px;
+    /* margin-left: 50px; */
     width: 90%;
+}
+.itemname {
+  padding-left: 12px;
 }
 
 #count {
-    display: inline-block;
-    width: 220px;
-    height: 28px;
-    padding-left: 3px;
-    border: 1px solid gray;
+  display: inline-block;
+  width: 155px;
+  height: 28px;
+  padding-left: 3px;
+  border: 1px solid gray;
 }
 
 
@@ -103,4 +127,23 @@ div textarea {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.find {
+  margin-top: 10px;
+}
+
+.phrase {
+  padding-bottom: 60px;
+}
+
+footer {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+footer p.copyright {
+  margin-left: auto;
+    margin-right: auto;
+    width: 195px
 }

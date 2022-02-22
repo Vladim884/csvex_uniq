@@ -63,16 +63,20 @@ router.post('/registration',
         const {email, password} = req.body
         const candidate = await User.findOne({email})
         if(candidate) {
-            return res.status(400).json({message: `User with email ${email} already exist`})
+            return res.status(400).json({message: `Пользователь с email: ${email} уже существует`})
+            
         }
         const hashPassword = await bcrypt.hash(password, 8)
         const user = new User({email, password: hashPassword})
         await user.save()
         // await fileService.createDir(new File({user:user.id, name: ''}))
-        res.json({message: "User was created"})
+        // res.json({message: "User was created"})
+        return res.render('./message.hbs')
+        // return res.render('./start.hbs')
     } catch (e) {
         console.log(e)
         res.send({message: "Server error"})
+        
     }
 })
 
