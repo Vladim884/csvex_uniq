@@ -116,9 +116,9 @@ router.post('/login',
         let newpath
         let results = []
         let ind = 0
-        resfind = []
-        resname = []
-        resgroup = []
+        let resfind = []
+        let resname = []
+        let resgroup = []
         if (req.url == '/upload') {
             console.log(req.url)
             const form = new formidable.IncomingForm();
